@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-	int t,n,k;
+	int t=0,n=0,k=0;
 	cin>>t>>n>>k;
 	int a[n][n];
 	memset(a, 0, sizeof(a[0][0]) *n * n);
