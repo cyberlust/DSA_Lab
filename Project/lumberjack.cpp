@@ -142,4 +142,5 @@ int main()
 	{
 		cout<<"cut left\n";
 	}
+	return 0;
 }
