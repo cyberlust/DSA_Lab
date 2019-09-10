@@ -1,0 +1,21 @@
+insert 6
+insert 9
+insert 3
+insert 19
+insert 0
+insert 5
+inorder
+postorder
+preorder
+delete 10
+delete 9
+inorder
+insert 21
+insert 13
+inorder
+delete 0
+inorder
+delete 3
+inorder
+delete 5
+inorder
