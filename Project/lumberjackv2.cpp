@@ -34,11 +34,20 @@ int main()
 		desc.push_back(single);
 	}
 	cuttree(t,n,desc,a,0,0);
+
 	return 0;
 }
 
 void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,int y)
 {
+		// for(int i=0;i<n;i++)
+		// {
+		// 	for(int j =0;j<n;j++)
+		// 	{
+		// 		cout<<a[j][i]<<" ";
+		// 	}
+		// 	cout<<endl;
+		// }
 		vector <int> v1;
 		vector <int> v2;
 		vector <int> v3;
@@ -89,20 +98,21 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
 												count1++;															// number of tress falling due to other in right direction
-												v1.push_back(k-i);
+												// v1.push_back(k-i);
 												weight1 = weight2;
-											}
-											else
-											{
+											// }
+											// else
+											// {
 												break1 = 1;
 											}
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3];
+											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
 											flag = 1;
 											max = value;
 											index1 = a[i][j]-1;
+											v1.push_back(k-i);
 										}
 									}
 								}
@@ -122,21 +132,22 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
 												count2++;															// number of tress falling due to other in left direction
-												v2.push_back(i-k);
+												// v2.push_back(i-k);
 												weight1 = weight2;
-											}
-											else
-											{
+											// }
+											// else
+											// {
 												break2 = 1;
 											}
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3];
+											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
 											flag = 2;
 											max = value;
 											index1 = a[i][j]-1;
-											weight1 = weight2;
+											v2.push_back(i-k);
+											// weight1 = weight2;
 										}
 									}
 								}
@@ -156,19 +167,21 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
 												count3++;															// number of tress falling due to other in up direction
-												v3.push_back(k-j);
-											}
-											else
-											{
+												// v3.push_back(k-j);
+												weight1 = weight2;
+											// }
+											// else
+											// {
 												break3 = 1;
 											}
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3];
+											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
 											flag = 3;
 											max = value;
 											index1 = a[i][j]-1;
+											v3.push_back(k-j);
 										}
 									}
 										
@@ -189,20 +202,21 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
 												count4++;															// number of tress falling due to other in down direction
-												v4.push_back(j-k);
+												// v4.push_back(j-k);
 												weight1 = weight2;
-											}
-											else
-											{
+											// }
+											// else
+											// {
 												break4 = 1;
 											}
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3];
+											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
 											flag = 4;
 											max = value;
 											index1 = a[i][j]-1;
+											v4.push_back(j-k);
 										}
 									}	
 								}
@@ -280,7 +294,14 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 				}
 				cout<<"cut left\n";
 			}
-			
+			// for(int i=0;i<n;i++)
+			// {
+			// 	for(int j =0;j<n;j++)
+			// 	{
+			// 		cout<<a[j][i]<<" ";
+			// 	}
+			// 	cout<<endl;
+			// }
 			cuttree(t - t1,n,desc,a,x,y);
 		}
-	}
+}
