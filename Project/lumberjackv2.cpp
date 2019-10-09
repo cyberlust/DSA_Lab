@@ -74,6 +74,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 				if(a[i][j])
 				{
 					index = a[i][j]-1;
+					int t_used = desc[index][0]+desc[index][1]+desc[index][3];
 					if(desc[index][0]+desc[index][1]+desc[index][3]<=t)
 					{
 						in = 1;
@@ -84,11 +85,14 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 						int height1 = height;
 						int weight1 = desc[index][2]*desc[index][3]*desc[index][4];
 						tempweight = weight1;
+						int tempheight = height;
+						int x_index = i;
+						int y_index = j;
 						// for(int l = 1; l < n; l++)
 						// {
 							// if(!break1)
 							 // {
-								for(int k=i+1;k<n and k<=i+height1;k++)
+								for(int k=x_index+1;k<n and k<=x_index+height1;k++)
 								{
 									if(!break1)
 									{
@@ -103,6 +107,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 												// v1.push_back(k-i);
 												weight1 = weight2;
 												height1 = desc[index][2];
+												x_index = desc[index][0];
 											}
 											else
 											{
@@ -111,7 +116,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
+											t1 = t-t_used;
 											flag = 1;
 											max = value;
 											index1 = a[i][j]-1;
@@ -120,10 +125,12 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 									}
 								}
 								weight1 = tempweight;
+								height1 = tempheight;
+								index = a[i][j]-1;
 							// }
 							// if(!break2)
 							// {
-								for(int k=i-1;k>=0 and k>=i-height;k--)
+								for(int k=x_index-1;k>=0 and k>=x_index-height1;k--)
 								{
 									if(!break2)
 									{
@@ -138,6 +145,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 												// v2.push_back(i-k);
 												weight1 = weight2;
 												height1 = desc[index][2];
+												x_index = desc[index][0];
 											}
 											else
 											{
@@ -146,7 +154,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
+											t1 = t-t_used;
 											flag = 2;
 											max = value;
 											index1 = a[i][j]-1;
@@ -156,10 +164,12 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 									}
 								}
 								weight1 = tempweight;
+								height1 = tempheight;
+								index = a[i][j]-1;
 							// }
 							// if(!break3)
 							// {
-								for(int k=j+1;k<n and k<=j+height;k++)
+								for(int k=y_index+1;k<n and k<=y_index+height1;k++)
 								{
 									if(!break3)
 									{
@@ -173,6 +183,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 												// count3++;															// number of tress falling due to other in up direction
 												// v3.push_back(k-j);
 												weight1 = weight2;
+												y_index = desc[index][1];
 												height1 = desc[index][2];
 											}
 											else
@@ -182,7 +193,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
+											t1 = t-t_used;
 											flag = 3;
 											max = value;
 											index1 = a[i][j]-1;
@@ -192,10 +203,12 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 										
 								}
 								weight1 = tempweight;
+								height1 = tempheight;
+								index = a[i][j]-1;
 							// }
 							// if(!break4)
 							// {
-								for(int k=j-1;k>=0 and k>=j-height;k--)
+								for(int k=y_index-1;k>=0 and k>=y_index-height1;k--)
 								{
 									if(!break4)
 									{
@@ -209,6 +222,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 												// count4++;															// number of tress falling due to other in down direction
 												// v4.push_back(j-k);
 												weight1 = weight2;
+												y_index = desc[index][1];
 												height1 = desc[index][2];
 											}
 											else
@@ -218,7 +232,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 										}
 										if(value>max)
 										{
-											t1 = desc[index][0]+desc[index][1]+desc[index][3]-x-y;
+											t1 = t-t_used;
 											flag = 4;
 											max = value;
 											index1 = a[i][j]-1;
@@ -227,6 +241,8 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 									}	
 								}
 								weight1 = tempweight;
+								height1 = tempheight;
+								index = a[i][j]-1;
 							// }
 						// }
 					}
@@ -312,6 +328,6 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 			v2.clear();
 			v3.clear();
 			v4.clear();
-			cuttree(t - t1,n,desc,x,y);
+			cuttree(t1,n,desc,x,y);
 		}
 }
