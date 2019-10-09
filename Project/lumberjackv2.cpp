@@ -2,13 +2,14 @@
 
 using namespace std;
 
-void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,int y);
+void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y);
+
+vector<vector<int>> a;
 
 int main()
 {
 	int t,n,k;
 	cin>>t>>n>>k;
-	vector <vector<int>> a;
     for(int i = 0; i<n; i++)
     {
     	std::vector<int> v;
@@ -33,12 +34,12 @@ int main()
 		a[x][y] = i+1;
 		desc.push_back(single);
 	}
-	cuttree(t,n,desc,a,0,0);
+	cuttree(t,n,desc,0,0);
 
 	return 0;
 }
 
-void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,int y)
+void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y)
 {
 		// for(int i=0;i<n;i++)
 		// {
@@ -56,7 +57,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 		int index=0,index1=0;
 		int max = 0;
 		int flag = 0, in = 0;
-		int t1 = 0, count1 = 1, count2 = 1, count3 = 1, count4 = 1;
+		int t1 = 0; //count1 = 1, count2 = 1, count3 = 1, count4 = 1;
 		v1.clear();
 		v1.push_back(0);
 		v2.clear();
@@ -76,17 +77,18 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 					if(desc[index][0]+desc[index][1]+desc[index][3]<=t)
 					{
 						in = 1;
-						count1 = 1, count2 = 1, count3 = 1, count4 = 1;
+						// count1 = 1, count2 = 1, count3 = 1, count4 = 1;
 						int break1 = 0,break2 = 0,break3 = 0,break4 = 0;
 						int value = desc[index][2]*desc[index][3]*desc[index][5];
 						int height = desc[index][2];
+						int height1 = height;
 						int weight1 = desc[index][2]*desc[index][3]*desc[index][4];
 						tempweight = weight1;
 						// for(int l = 1; l < n; l++)
 						// {
-							if(!break1)
-							 {
-								for(int k=i+1;k<n and k<=i+height;k++)
+							// if(!break1)
+							 // {
+								for(int k=i+1;k<n and k<=i+height1;k++)
 								{
 									if(!break1)
 									{
@@ -97,12 +99,13 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											if(weight1>weight2)
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
-												count1++;															// number of tress falling due to other in right direction
+												// count1++;															// number of tress falling due to other in right direction
 												// v1.push_back(k-i);
 												weight1 = weight2;
-											// }
-											// else
-											// {
+												height1 = desc[index][2];
+											}
+											else
+											{
 												break1 = 1;
 											}
 										}
@@ -117,9 +120,9 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 									}
 								}
 								weight1 = tempweight;
-							}
-							if(!break2)
-							{
+							// }
+							// if(!break2)
+							// {
 								for(int k=i-1;k>=0 and k>=i-height;k--)
 								{
 									if(!break2)
@@ -131,12 +134,13 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											if(weight1>weight2)
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
-												count2++;															// number of tress falling due to other in left direction
+												// count2++;															// number of tress falling due to other in left direction
 												// v2.push_back(i-k);
 												weight1 = weight2;
-											// }
-											// else
-											// {
+												height1 = desc[index][2];
+											}
+											else
+											{
 												break2 = 1;
 											}
 										}
@@ -152,9 +156,9 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 									}
 								}
 								weight1 = tempweight;
-							}
-							if(!break3)
-							{
+							// }
+							// if(!break3)
+							// {
 								for(int k=j+1;k<n and k<=j+height;k++)
 								{
 									if(!break3)
@@ -166,12 +170,13 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											if(weight1>weight2)
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
-												count3++;															// number of tress falling due to other in up direction
+												// count3++;															// number of tress falling due to other in up direction
 												// v3.push_back(k-j);
 												weight1 = weight2;
-											// }
-											// else
-											// {
+												height1 = desc[index][2];
+											}
+											else
+											{
 												break3 = 1;
 											}
 										}
@@ -187,9 +192,9 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 										
 								}
 								weight1 = tempweight;
-							}
-							if(!break4)
-							{
+							// }
+							// if(!break4)
+							// {
 								for(int k=j-1;k>=0 and k>=j-height;k--)
 								{
 									if(!break4)
@@ -201,12 +206,13 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 											if(weight1>weight2)
 											{
 												value += desc[index][2]*desc[index][3]*desc[index][5];
-												count4++;															// number of tress falling due to other in down direction
+												// count4++;															// number of tress falling due to other in down direction
 												// v4.push_back(j-k);
 												weight1 = weight2;
-											// }
-											// else
-											// {
+												height1 = desc[index][2];
+											}
+											else
+											{
 												break4 = 1;
 											}
 										}
@@ -221,7 +227,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 									}	
 								}
 								weight1 = tempweight;
-							}
+							// }
 						// }
 					}
 				}
@@ -302,6 +308,10 @@ void cuttree(int t,int n,vector <vector<int>> &desc,vector<vector<int>> a,int x,
 			// 	}
 			// 	cout<<endl;
 			// }
-			cuttree(t - t1,n,desc,a,x,y);
+			v1.clear();
+			v2.clear();
+			v3.clear();
+			v4.clear();
+			cuttree(t - t1,n,desc,x,y);
 		}
 }
