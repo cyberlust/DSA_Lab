@@ -3,8 +3,14 @@
 using namespace std;
 
 void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp);
+int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc, int xp, int yp);
 
 vector<vector<int>> a;
+int flag = 0, in = 0;
+vector <int> v1;
+vector <int> v2;
+vector <int> v3;
+vector <int> v4;
 
 int main()
 {
@@ -21,9 +27,6 @@ int main()
     }
 	vector <vector<int>> desc;
 	float max = 0;
-	int min = INT_MAX;
-	int x_coor;
-	int y_coor;
 	for(int i=0;i<k;i++)
 	{
 		int x,y,h,d,c,p;
@@ -37,64 +40,53 @@ int main()
 		single.push_back(p);  //unit value   //profit = p.d.h
 		a[x][y] = i+1;
 		desc.push_back(single);
-		int profit = p*d*h;
-		float gross_profit = abs(profit-(x+y+d));
-		// float gross_profit = profit;
-		int gross_distance = x + y;
-		// if(gross_profit>max and (x + y + d) <= t)
-		// {
-		// 	x_coor = x;
-		// 	y_coor = y;
-		// 	max = gross_profit;
-		// }
-		if(gross_distance<min and (x + y + d) <= t)
-		{
-			x_coor = x;
-			y_coor = y;
-			min = gross_distance;
-		}
-
 	}
-	cuttree(t,n,desc,x_coor,y_coor,0,0);
+	int x_coor=-1,y_coor=-1;
+	for(int k=0;k<n;k++)
+	{
+		for(int l=0;l<n;l++)
+		{
+			if(a[k][l])
+			{
+				int index = a[k][l] - 1;
+				// cout<<index<<endl;
+				// x_coor = desc[index][0];
+				// y_coor = desc[index][1];
+				// // cout<<x_coor<<" "<<y_coor<<endl;
+				int profit = desc[index][2]*desc[index][3]*desc[index][5];
+				// cout<<"profit: "<<profit<<endl;
+				int value_cut = FindMax(k,l,t,n,desc,0,0);
+				float gross_profit = value_cut/(abs(desc[index][0])+abs(desc[index][1])+desc[index][3]);
+				if(gross_profit>max and (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]) <= t)
+				{
+					x_coor = desc[index][0];
+					y_coor = desc[index][1];
+					max = gross_profit;
+				}
+			}
+		}
+	}
+	// cout<<flag<<endl;
+	if(x_coor!=-1 and y_coor!= -1)
+	{
+		cuttree(t,n,desc,x_coor,y_coor,0,0);
+	}
 
 	return 0;
 }
 
-void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
+int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 {
-		// for(int i=n-1;i>=0;i--)
-		// {
-		// 	for(int j =0;j<n;j++)
-		// 	{
-		// 		cout<<a[j][i]<<" ";
-		// 	}
-		// 	cout<<endl;
-		// }
-		// cout<<"t: "<<t<<endl;
-		vector <int> v1;
-		vector <int> v2;
-		vector <int> v3;
-		vector <int> v4;	
-		int tempweight = 0,weight2 = 0;
-		int index=0,index1=0;
-		int max = 0;
-		int flag = 0, in = 0;
-		int t1 = 0; //count1 = 1, count2 = 1, count3 = 1, count4 = 1;
-		v1.clear();
-		v1.push_back(0);
-		v2.clear();
-		v2.push_back(0);
-		v3.clear();
-		v3.push_back(0);	
-		v4.clear();
-		v4.push_back(0);
-		
 		int i = x;
-		int j = y;	
+		int j = y;
+		int max = 0;
+		int index=0,index1=0;
 		if(a[i][j])
 		{
+			int t1 = 0;
+			int tempweight = 0,weight2 = 0;
 			index = a[i][j]-1;
-			int t_used = abs(desc[index][0] - xp)+abs(desc[index][1] - yp)+desc[index][3];
+			int t_used = abs(desc[index][0]-xp)+abs(desc[index][1]-yp)+desc[index][3];
 			if(t_used<=t)
 			{
 				in = 1;
@@ -277,6 +269,35 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 				value = desc[index][2]*desc[index][3]*desc[index][5];
 			}
 		}
+
+		// cout<<max<<" "<<index1<<" "<<flag<<endl;
+		return max;
+}
+
+void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
+{
+		// for(int i=n-1;i>=0;i--)
+		// {
+		// 	for(int j =0;j<n;j++)
+		// 	{
+		// 		cout<<a[j][i]<<" ";
+		// 	}
+		// 	cout<<endl;
+		// }
+		// cout<<"t: "<<t<<endl;
+			
+		
+		
+		 //count1 = 1, count2 = 1, count3 = 1, count4 = 1;
+		v1.push_back(0);
+		v2.push_back(0);
+		v3.push_back(0);
+		v4.push_back(0);
+		int i = x;
+		int j = y;
+		int index = a[i][j]-1;
+		int t_used = abs(desc[index][0] - xp)+abs(desc[index][1] - yp)+desc[index][3];
+		int t1 = t-t_used;
 			
 		// cout<<max<<endl;
 			
@@ -318,7 +339,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			{
 				for(int m = 0; m < v3.size(); m++)
 				{
-					a[desc[index1][0]][desc[index1][1]+v3[m]] = 0;
+					a[desc[index][0]][desc[index][1]+v3[m]] = 0;
 				}
 				cout<<"cut up\n";
 			}
@@ -326,7 +347,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			{
 				for(int m = 0; m < v4.size(); m++)
 				{
-					a[desc[index1][0]][desc[index1][1]- v4[m]] = 0;
+					a[desc[index][0]][desc[index][1]- v4[m]] = 0;
 				}
 				cout<<"cut down\n";
 			}
@@ -334,7 +355,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			{
 				for(int m = 0; m < v1.size(); m++)
 				{
-					a[desc[index1][0] + v1[m]][desc[index1][1]] = 0;
+					a[desc[index][0] + v1[m]][desc[index][1]] = 0;
 				}
 				cout<<"cut right\n";
 			}
@@ -342,7 +363,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			{
 				for(int m = 0; m < v2.size(); m++)
 				{
-					a[desc[index1][0] - v2[m]][desc[index1][1]] = 0;
+					a[desc[index][0] - v2[m]][desc[index][1]] = 0;
 				}
 				cout<<"cut left\n";
 			}
@@ -369,34 +390,26 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 					if(a[k][l])
 					{
 						int index = a[k][l] - 1;
-						int min = INT_MAX;
 						// cout<<index<<endl;
-						x_coor = desc[index][0];
-						y_coor = desc[index][1];
-						// cout<<x_coor<<" "<<y_coor<<endl;
+						// x_coor = desc[index][0];
+						// y_coor = desc[index][1];
+						// // cout<<x_coor<<" "<<y_coor<<endl;
 						int profit = desc[index][2]*desc[index][3]*desc[index][5];
 						// cout<<"profit: "<<profit<<endl;
-						value_cut = max;
-						float gross_profit = abs(value_cut-(abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]));
-						// float gross_profit = value_cut;
-						int gross_distance = abs(desc[index][0]-x)+abs(desc[index][1]-y);
-						// if(gross_profit>max1 and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
-						// {
-						// 	x_coor = desc[index][0];
-						// 	y_coor = desc[index][1];
-						// 	max1 = gross_profit;
-						// }
-						if(gross_distance<min and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
+						value_cut = FindMax(k,l,t1,n,desc,xp,yp);
+						float gross_profit = value_cut/(abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]);
+						if(gross_profit>max1 and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
 						{
 							x_coor = desc[index][0];
 							y_coor = desc[index][1];
-							min = gross_distance;
+							max1 = gross_profit;
 						}
 					}
 				}
 			}
 			// cout<<value_cut<<endl;
 			// cout<<x_coor<<" "<<y_coor<<endl;
+			// cout<<flag<<endl;
 			if(x_coor!=-1 and y_coor!= -1)
 			{
 				cuttree(t1,n,desc,x_coor,y_coor,x,y);
