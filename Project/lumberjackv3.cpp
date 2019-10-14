@@ -5,6 +5,7 @@ using namespace std;
 void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp);
 int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc, int xp, int yp);
 
+vector <pair <int,int>> p;
 vector<vector<int>> a;
 int flag = 0, in = 0;
 vector <int> v1;
@@ -55,8 +56,10 @@ int main()
 				// // cout<<x_coor<<" "<<y_coor<<endl;
 				int profit = desc[index][2]*desc[index][3]*desc[index][5];
 				// cout<<"profit: "<<profit<<endl;
-				int value_cut = FindMax(k,l,t,n,desc,0,0);
+				float value_cut = FindMax(k,l,t,n,desc,0,0);
+				// cout<<"value_cut: "<<value_cut<<endl;
 				float gross_profit = value_cut/(abs(desc[index][0])+abs(desc[index][1])+desc[index][3]);
+				// cout<<"gross_profit:"<<gross_profit<<" index:"<<index<<endl;
 				if(gross_profit>max and (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]) <= t)
 				{
 					x_coor = desc[index][0];
@@ -131,6 +134,10 @@ int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 							t1 = t-t_used;
 							flag = 1;
 							max = value;
+							pair <int,int> pa;
+							pa.first = max;
+							pa.second = flag;
+							p.push_back(pa);
 							index1 = a[i][j]-1;
 							v1.push_back(k-i);
 						}
@@ -172,6 +179,10 @@ int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 							t1 = t-t_used;
 							flag = 2;
 							max = value;
+							pair <int,int> pa;
+							pa.first = max;
+							pa.second = flag;
+							p.push_back(pa);
 							index1 = a[i][j]-1;
 							v2.push_back(i-k);
 							// weight1 = weight2;
@@ -214,6 +225,10 @@ int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 							t1 = t-t_used;
 							flag = 3;
 							max = value;
+							pair <int,int> pa;
+							pa.first = max;
+							pa.second = flag;
+							p.push_back(pa);
 							index1 = a[i][j]-1;
 							v3.push_back(k-j);
 						}
@@ -256,6 +271,10 @@ int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 							t1 = t-t_used;
 							flag = 4;
 							max = value;
+							pair <int,int> pa;
+							pa.first = max;
+							pa.second = flag;
+							p.push_back(pa);
 							index1 = a[i][j]-1;
 							v4.push_back(j-k);
 						}
@@ -270,7 +289,7 @@ int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 			}
 		}
 
-		// cout<<max<<" "<<index1<<" "<<flag<<endl;
+		// cout<<"max: "<<max<<" index1: "<<index1<<endl;
 		return max;
 }
 
@@ -286,8 +305,10 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 		// }
 		// cout<<"t: "<<t<<endl;
 			
-		
-		
+		sort(p.begin(),p.end());
+		// cout<<flag<<endl;
+		flag = p[p.size()-1].second;
+		// cout<<"flag: "<<flag<<endl;
 		 //count1 = 1, count2 = 1, count3 = 1, count4 = 1;
 		v1.push_back(0);
 		v2.push_back(0);
@@ -309,28 +330,28 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			// y = desc[index1][1];
 			if(xl>0)
 			{
-				for(int i=0;i<xl;i++)
+				for(int z=0;z<xl;z++)
 				{
 					cout<<"move right\n";
 				}
 			}
 			else if(xl<0)
 			{
-				for(int i=0;i<(-xl);i++)
+				for(int z=0;z<(-xl);z++)
 				{
 					cout<<"move left\n";
 				}
 			}
 			if(yl>0)
 			{
-				for(int i=0;i<yl;i++)
+				for(int z=0;z<yl;z++)
 				{
 					cout<<"move up\n";
 				}
 			}
 			else if(yl<0)
 			{
-				for(int i=0;i<(-yl);i++)
+				for(int z=0;z<(-yl);z++)
 				{
 					cout<<"move down\n";
 				}
@@ -379,10 +400,11 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			v2.clear();
 			v3.clear();
 			v4.clear();
+			p.clear();
 			int x_coor=-1;
 			int y_coor=-1;
 			int max1 = 0;
-			int value_cut = 0;
+			float value_cut = 0;
 			for(int k=0;k<n;k++)
 			{
 				for(int l=0;l<n;l++)
@@ -396,7 +418,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 						// // cout<<x_coor<<" "<<y_coor<<endl;
 						int profit = desc[index][2]*desc[index][3]*desc[index][5];
 						// cout<<"profit: "<<profit<<endl;
-						value_cut = FindMax(k,l,t1,n,desc,xp,yp);
+						value_cut = FindMax(k,l,t1,n,desc,x,y);
 						float gross_profit = value_cut/(abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]);
 						if(gross_profit>max1 and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
 						{
