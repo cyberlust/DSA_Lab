@@ -3,7 +3,7 @@
 using namespace std;
 
 void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp);
-int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc, int xp, int yp);
+float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc, int xp, int yp);
 
 vector <pair <int,int>> p;
 vector<vector<int>> a;
@@ -58,7 +58,8 @@ int main()
 				// cout<<"profit: "<<profit<<endl;
 				float value_cut = FindMax(k,l,t,n,desc,0,0);
 				// cout<<"value_cut: "<<value_cut<<endl;
-				float gross_profit = value_cut/(abs(desc[index][0])+abs(desc[index][1])+desc[index][3]);
+				float time = (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]);
+				float gross_profit = value_cut/time;
 				// cout<<"gross_profit:"<<gross_profit<<" index:"<<index<<endl;
 				if(gross_profit>max and (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]) <= t)
 				{
@@ -78,7 +79,7 @@ int main()
 	return 0;
 }
 
-int FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
+float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int yp)
 {
 		int i = x;
 		int j = y;
@@ -403,7 +404,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			p.clear();
 			int x_coor=-1;
 			int y_coor=-1;
-			int max1 = 0;
+			float max1 = 0;
 			float value_cut = 0;
 			for(int k=0;k<n;k++)
 			{
@@ -419,7 +420,8 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 						int profit = desc[index][2]*desc[index][3]*desc[index][5];
 						// cout<<"profit: "<<profit<<endl;
 						value_cut = FindMax(k,l,t1,n,desc,x,y);
-						float gross_profit = value_cut/(abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]);
+						float time = (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]);
+						float gross_profit = value_cut/time;
 						if(gross_profit>max1 and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
 						{
 							x_coor = desc[index][0];
