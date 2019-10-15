@@ -15,7 +15,7 @@ vector <int> v4;
 
 int main()
 {
-	int index1 = 0;
+	int index1 = -1;
 	int t,n,k;
 	cin>>t>>n>>k;
     for(int i = 0; i<n; i++)
@@ -55,7 +55,7 @@ int main()
 				// x_coor = desc[index][0];
 				// y_coor = desc[index][1];
 				// // cout<<x_coor<<" "<<y_coor<<endl;
-				int profit = desc[index][2]*desc[index][3]*desc[index][5];
+				// int profit = desc[index][2]*desc[index][3]*desc[index][5];
 				// cout<<"profit: "<<profit<<endl;
 				float value_cut = FindMax(k,l,t,n,desc,0,0);
 				// cout<<"value_cut: "<<value_cut<<endl;
@@ -68,7 +68,7 @@ int main()
 					x_coor = desc[index][0];
 					y_coor = desc[index][1];
 					max = gross_profit;
-					cout<<index1<<endl;
+					// cout<<index1<<endl;
 				}
 			}
 		}
@@ -77,6 +77,7 @@ int main()
 	v2.clear();
 	v3.clear();
 	v4.clear();
+	p.clear();
 	FindMax(desc[index1][0],desc[index1][1],t,n,desc,0,0);
 	// cout<<flag<<endl;
 	if(x_coor!=-1 and y_coor!= -1)
@@ -96,7 +97,7 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 		int i = x;
 		int j = y;
 		int max = 0;
-		int index=0,index1=0;
+		int index=-1;
 		if(a[i][j])
 		{
 			int t1 = 0;
@@ -151,8 +152,11 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 							pa.first = max;
 							pa.second = flag;
 							p.push_back(pa);
-							index1 = a[i][j]-1;
-							v1.push_back(k-i);
+							// index1 = a[i][j]-1;
+							if(a[k][j])
+							{
+								v1.push_back(k-i);
+							}
 						}
 					}
 				}
@@ -196,8 +200,11 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 							pa.first = max;
 							pa.second = flag;
 							p.push_back(pa);
-							index1 = a[i][j]-1;
-							v2.push_back(i-k);
+							// index1 = a[i][j]-1;
+							if(a[k][j])
+							{
+								v2.push_back(i-k);
+							}
 							// weight1 = weight2;
 						}
 					}
@@ -242,8 +249,11 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 							pa.first = max;
 							pa.second = flag;
 							p.push_back(pa);
-							index1 = a[i][j]-1;
-							v3.push_back(k-j);
+							// index1 = a[i][j]-1;
+							if(a[i][k])
+							{
+								v3.push_back(k-j);
+							}
 						}
 					}
 						
@@ -288,8 +298,11 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 							pa.first = max;
 							pa.second = flag;
 							p.push_back(pa);
-							index1 = a[i][j]-1;
-							v4.push_back(j-k);
+							// index1 = a[i][j]-1;
+							if(a[i][k])
+							{
+								v4.push_back(j-k);
+							}
 						}
 					}	
 				}
@@ -307,17 +320,19 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 }
 
 void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
-{
-		// for(int i=n-1;i>=0;i--)
-		// {
-		// 	for(int j =0;j<n;j++)
-		// 	{
-		// 		cout<<a[j][i]<<" ";
-		// 	}
-		// 	cout<<endl;
-		// }
+{		
+		cout<<"------"<<endl;
+		for(int i=n-1;i>=0;i--)
+		{
+			for(int j =0;j<n;j++)
+			{
+				cout<<a[j][i]<<" ";
+			}
+			cout<<endl;
+		}
+		cout<<"----------"<<endl;
 		// cout<<"t: "<<t<<endl;
-		int index1 = 0;
+		int index1 = -1;
 		sort(p.begin(),p.end());
 		// cout<<flag<<endl;
 		flag = p[p.size()-1].second;
@@ -369,6 +384,27 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 					cout<<"move down\n";
 				}
 			}
+			// for(auto i:v3)
+			// {
+			// 	cout<<i<<" ";
+			// }
+			// cout<<endl;
+			// for(auto i:v1)
+			// {
+			// 	cout<<i<<" ";
+			// }
+			// cout<<endl;
+			// for(auto i:v2)
+			// {
+			// 	cout<<i<<" ";
+			// }
+			// cout<<endl;
+			// for(auto i:v4)
+			// {
+			// 	cout<<i<<" ";
+			// }
+			// cout<<endl;
+
 			if(flag==3)
 			{
 				for(int m = 0; m < v3.size(); m++)
@@ -401,14 +437,15 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 				}
 				cout<<"cut left\n";
 			}
-			// for(int i=0;i<n;i++)
-			// {
-			// 	for(int j =0;j<n;j++)
-			// 	{
-			// 		cout<<a[j][i]<<" ";
-			// 	}
-			// 	cout<<endl;
-			// }
+			cout<<"-----------"<<endl;
+			for(int i=n-1;i>=0;i--)
+			{
+				for(int j =0;j<n;j++)
+				{
+					cout<<a[j][i]<<" ";
+				}
+				cout<<endl;
+			}
 			v1.clear();
 			v2.clear();
 			v3.clear();
@@ -440,7 +477,7 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 							y_coor = desc[index][1];
 							max1 = gross_profit;
 							index1 = index;
-							cout<<index1<<endl;
+							// cout<<index1<<endl;
 						}
 					}
 				}
@@ -449,13 +486,18 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 			v2.clear();
 			v3.clear();
 			v4.clear();
-			FindMax(desc[index1][0],desc[index1][1],t1,n,desc,x,y);
+			p.clear();
+			if(index1 != -1)
+			{
+				FindMax(desc[index1][0],desc[index1][1],t1,n,desc,x,y);
+			}
 			// cout<<value_cut<<endl;
 			// cout<<x_coor<<" "<<y_coor<<endl;
 			// cout<<flag<<endl;
 			if(x_coor!=-1 and y_coor!= -1)
 			{
-				cuttree(t1,n,desc,x_coor,y_coor,x,y);
+				if(a[x_coor][y_coor])
+					cuttree(t1,n,desc,x_coor,y_coor,x,y);
 			}
 		// }
 }
