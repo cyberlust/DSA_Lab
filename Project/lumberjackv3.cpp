@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include<bits/stdc++.h>					//adding values more than once
 
 using namespace std;
 
@@ -8,6 +8,7 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc, int xp, int 
 vector <pair <int,int>> p;
 vector<vector<int>> a;
 int flag = 0;
+queue <int> q;
 vector <int> v1;
 vector <int> v2;
 vector <int> v3;
@@ -20,7 +21,7 @@ int main()
 	cin>>t>>n>>k;
     for(int i = 0; i<n; i++)
     {
-    	std::vector<int> v;
+    	vector<int> v;
     	for(int j = 0; j<n; j++)
     	{
     		v.push_back(0);
@@ -58,8 +59,9 @@ int main()
 				// int profit = desc[index][2]*desc[index][3]*desc[index][5];
 				// cout<<"profit: "<<profit<<endl;
 				float value_cut = FindMax(k,l,t,n,desc,0,0);
+				p.clear();
 				// cout<<"value_cut: "<<value_cut<<endl;
-				float time = (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]);
+				float time = pow((abs(desc[index][0])+abs(desc[index][1])+desc[index][3]),0.81);
 				float gross_profit = value_cut/time;
 				// cout<<"gross_profit:"<<gross_profit<<" index:"<<index<<endl;
 				if(gross_profit>max and (abs(desc[index][0])+abs(desc[index][1])+desc[index][3]) <= t)
@@ -70,6 +72,7 @@ int main()
 					max = gross_profit;
 					// cout<<index1<<endl;
 				}
+
 			}
 		}
 	}
@@ -84,7 +87,14 @@ int main()
 	{
 		cuttree(t,n,desc,x_coor,y_coor,0,0);
 	}
-
+	// for(int i=0;i<n;i++)
+	// {
+	// 	for(int j=0;j<n;j++)
+	// 	{
+	// 		cout<<a[i][j]<<" ";
+	// 	}
+	// 	cout<<endl;
+	// }
 	return 0;
 }
 
@@ -103,12 +113,12 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 			int t1 = 0;
 			int tempweight = 0,weight2 = 0;
 			index = a[i][j]-1;
-			int t_used = abs(desc[index][0]-xp)+abs(desc[index][1]-yp)+desc[index][3];
+			int t_used = (abs(desc[index][0]-xp)+abs(desc[index][1]-yp)+desc[index][3]);
 			if(t_used<=t)
 			{
-				// in = 1;s
+				// in = 1;
 				// count1 = 1, count2 = 1, count3 = 1, count4 = 1;
-				int break1 = 0,break2 = 0,break3 = 0,break4 = 0;
+				// int break1 = 0,break2 = 0,break3 = 0,break4 = 0;
 				int value = desc[index][2]*desc[index][3]*desc[index][5];
 				int height = desc[index][2];
 				int height1 = height;
@@ -121,45 +131,57 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 				// {
 					// if(!break1)
 					 // {
-				for(int k=x_index+1;k<n and k<=x_index+height1;k++)
+				q.push(index);
+				while(!q.empty())
 				{
-					if(!break1)
+					int index2 = q.front();
+					int index3 = q.back();
+					x_index = desc[index3][0];
+					height1 = desc[index2][2];
+					weight1 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+					q.pop();
+					for(int k=x_index+1;k<n and k<=x_index+height1;k++)
 					{
-						if(a[k][j])
-						{
-							index = a[k][j]-1;
-							weight2 = desc[index][2]*desc[index][3]*desc[index][4];
-							if(weight1>weight2)
-							{
-								value += desc[index][2]*desc[index][3]*desc[index][5];
-								// count1++;															// number of tress falling due to other in right direction
-								// v1.push_back(k-i);
-								weight1 = weight2;
-								height1 = desc[index][2];
-								x_index = desc[index][0];
-							}
-							else
-							{
-								break1 = 1;
-							}
-						}
-						if(value>max)
-						{
-							// t1 = t-t_used;
-							flag = 1;
-							max = value;
-							pair <int,int> pa;
-							pa.first = max;
-							pa.second = flag;
-							p.push_back(pa);
-							// index1 = a[i][j]-1;
+						// if(!break1)
+						// {
 							if(a[k][j])
 							{
-								v1.push_back(k-i);
+								index2 = a[k][j]-1;
+								weight2 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+								if(weight1>weight2)
+								{
+									value += desc[index2][2]*desc[index2][3]*desc[index2][5];
+									// count1++;															// number of tress falling due to other in right direction
+									// v1.push_back(k-i);
+									q.push(index2);
+									// weight2 = weight1;
+									// height1 = desc[index][2];
+									// x_index = desc[index][0];
+								}
+								else
+								{
+									break;
+								}
 							}
-						}
+							if(value>max)
+							{
+								// t1 = t-t_used;
+								flag = 1;
+								max = value;
+								pair <int,int> pa;
+								pa.first = max;
+								pa.second = flag;
+								p.push_back(pa);
+								// index1 = a[i][j]-1;
+								if(a[k][j])
+								{
+									v1.push_back(k-i);
+								}
+							}
+						// }
 					}
 				}
+				max=0;
 				weight1 = tempweight;
 				height1 = tempheight;
 				index = a[i][j]-1;
@@ -169,46 +191,59 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 			// }
 			// if(!break2)
 			// {
-				for(int k=x_index-1;k>=0 and k>=x_index-height1;k--)
+				q.push(index);
+				while(!q.empty())
 				{
-					if(!break2)
+					int index2 = q.front();
+					int index3 = q.back();
+					x_index = desc[index3][0];
+					height1 = desc[index][2];
+					weight1 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+					q.pop();
+					x_index = desc[index][0];
+					for(int k=x_index-1;k>=0 and k>=x_index-height1;k--)
 					{
-						if(a[k][j])
-						{
-							index = a[k][j]-1;
-							int weight2 = desc[index][2]*desc[index][3]*desc[index][4];
-							if(weight1>weight2)
-							{
-								value += desc[index][2]*desc[index][3]*desc[index][5];
-								// count2++;															// number of tress falling due to other in left direction
-								// v2.push_back(i-k);
-								weight1 = weight2;
-								height1 = desc[index][2];
-								x_index = desc[index][0];
-							}
-							else
-							{
-								break2 = 1;
-							}
-						}
-						if(value>max)
-						{
-							// t1 = t-t_used;
-							flag = 2;
-							max = value;
-							pair <int,int> pa;
-							pa.first = max;
-							pa.second = flag;
-							p.push_back(pa);
-							// index1 = a[i][j]-1;
+						// if(!break2)
+						// {
 							if(a[k][j])
 							{
-								v2.push_back(i-k);
+								index2 = a[k][j]-1;
+								int weight2 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+								if(weight1>weight2)
+								{
+									value += desc[index2][2]*desc[index2][3]*desc[index2][5];
+									// count2++;															// number of tress falling due to other in left direction
+									// v2.push_back(i-k);
+									q.push(index2);
+									// weight1 = weight2;
+									// height1 = desc[index2][2];
+									// x_index = desc[index2][0];
+								}
+								else
+								{
+									break;
+								}
 							}
-							// weight1 = weight2;
-						}
+							if(value>max)
+							{
+								// t1 = t-t_used;
+								flag = 2;
+								max = value;
+								pair <int,int> pa;
+								pa.first = max;
+								pa.second = flag;
+								p.push_back(pa);
+								// index1 = a[i][j]-1;
+								if(a[k][j])
+								{
+									v2.push_back(i-k);
+								}
+								// weight1 = weight2;
+							}
+						// }
 					}
 				}
+				max=0;
 				weight1 = tempweight;
 				height1 = tempheight;
 				index = a[i][j]-1;
@@ -218,46 +253,59 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 			// }
 			// if(!break3)
 			// {
-				for(int k=y_index+1;k<n and k<=y_index+height1;k++)
+				q.push(index);
+				while(!q.empty())
 				{
-					if(!break3)
+					int index2 = q.front();
+					int index3 = q.back();
+					x_index = desc[index3][0];
+					height1 = desc[index2][2];
+					weight1 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+					q.pop();
+					y_index = desc[index][1];
+					for(int k=y_index+1;k<n and k<=y_index+height1;k++)
 					{
-						if(a[i][k])
-						{
-							index = a[i][k]-1;
-							int weight2 = desc[index][2]*desc[index][3]*desc[index][4];
-							if(weight1>weight2)
-							{
-								value += desc[index][2]*desc[index][3]*desc[index][5];
-								// count3++;															// number of tress falling due to other in up direction
-								// v3.push_back(k-j);
-								weight1 = weight2;
-								y_index = desc[index][1];
-								height1 = desc[index][2];
-							}
-							else
-							{
-								break3 = 1;
-							}
-						}
-						if(value>max)
-						{
-							// t1 = t-t_used;
-							flag = 3;
-							max = value;
-							pair <int,int> pa;
-							pa.first = max;
-							pa.second = flag;
-							p.push_back(pa);
-							// index1 = a[i][j]-1;
+						// if(!break3)
+						// {
 							if(a[i][k])
 							{
-								v3.push_back(k-j);
+								index2 = a[i][k]-1;
+								int weight2 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+								if(weight1>weight2)
+								{
+									value += desc[index2][2]*desc[index2][3]*desc[index2][5];
+									// count3++;															// number of tress falling due to other in up direction
+									// v3.push_back(k-j);
+									q.push(index2);
+									// weight1 = weight2;
+									// y_index = desc[index][1];
+									// height1 = desc[index][2];
+								}
+								else
+								{
+									break;
+								}
 							}
-						}
+							if(value>max)
+							{
+								// t1 = t-t_used;
+								flag = 3;
+								max = value;
+								pair <int,int> pa;
+								pa.first = max;
+								pa.second = flag;
+								p.push_back(pa);
+								// index1 = a[i][j]-1;
+								if(a[i][k])
+								{
+									v3.push_back(k-j);
+								}
+							}
+						// }
+							
 					}
-						
 				}
+				max=0;
 				weight1 = tempweight;
 				height1 = tempheight;
 				index = a[i][j]-1;
@@ -267,45 +315,59 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 			// }
 			// if(!break4)
 			// {
-				for(int k=y_index-1;k>=0 and k>=y_index-height1;k--)
+				q.push(index);
+				while(!q.empty())
 				{
-					if(!break4)
+					int index2 = q.front();
+					int index3 = q.back();
+					x_index = desc[index3][0];
+					height1 = desc[index2][2];
+					weight1 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+					q.pop();
+					y_index = desc[index2][1];
+					for(int k=y_index-1;k>=0 and k>=y_index-height1;k--)
 					{
-						if(a[i][k])
-						{
-							index = a[i][k]-1;	
-							int weight2 = desc[index][2]*desc[index][3]*desc[index][4];
-							if(weight1>weight2)
-							{
-								value += desc[index][2]*desc[index][3]*desc[index][5];
-								// count4++;															// number of tress falling due to other in down direction
-								// v4.push_back(j-k);
-								weight1 = weight2;
-								y_index = desc[index][1];
-								height1 = desc[index][2];
-							}
-							else
-							{
-								break4 = 1;
-							}
-						}
-						if(value>max)
-						{
-							// t1 = t-t_used;
-							flag = 4;
-							max = value;
-							pair <int,int> pa;
-							pa.first = max;
-							pa.second = flag;
-							p.push_back(pa);
-							// index1 = a[i][j]-1;
+						// if(!break4)
+						// {
 							if(a[i][k])
 							{
-								v4.push_back(j-k);
+								index2 = a[i][k]-1;	
+								int weight2 = desc[index2][2]*desc[index2][3]*desc[index2][4];
+								if(weight1>weight2)
+								{
+									value += desc[index2][2]*desc[index2][3]*desc[index2][5];
+									// count4++;															// number of tress falling due to other in down direction
+									// v4.push_back(j-k);
+									// weight1 = weight2;
+									q.push(index2);
+									// y_index = desc[index2][1];
+									// height1 = desc[index2][2];
+								}
+								else
+								{
+									break;
+								}
 							}
-						}
-					}	
+							if(value>max)
+							{
+								// t1 = t-t_used;
+								flag = 4;
+								max = value;
+								pair <int,int> pa;
+								pa.first = max;
+								pa.second = flag;
+								p.push_back(pa);
+								// index1 = a[i][j]-1;
+								if(a[i][k])
+								{
+									v4.push_back(j-k);
+								}
+							}
+						// }	
+					}
 				}
+				sort(p.begin(),p.end());
+				max = p[p.size()-1].first;
 				weight1 = tempweight;
 				height1 = tempheight;
 				index = a[i][j]-1;
@@ -321,16 +383,16 @@ float FindMax(int x,int y, int t, int n, vector<vector<int>> &desc,int xp, int y
 
 void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 {		
-		cout<<"------"<<endl;
-		for(int i=n-1;i>=0;i--)
-		{
-			for(int j =0;j<n;j++)
-			{
-				cout<<a[j][i]<<" ";
-			}
-			cout<<endl;
-		}
-		cout<<"----------"<<endl;
+		// cout<<"------"<<endl;
+		// for(int i=n-1;i>=0;i--)
+		// {
+		// 	for(int j =0;j<n;j++)
+		// 	{
+		// 		cout<<a[j][i]<<" ";
+		// 	}
+		// 	cout<<endl;
+		// }
+		// cout<<"----------"<<endl;
 		// cout<<"t: "<<t<<endl;
 		int index1 = -1;
 		sort(p.begin(),p.end());
@@ -437,15 +499,15 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 				}
 				cout<<"cut left\n";
 			}
-			cout<<"-----------"<<endl;
-			for(int i=n-1;i>=0;i--)
-			{
-				for(int j =0;j<n;j++)
-				{
-					cout<<a[j][i]<<" ";
-				}
-				cout<<endl;
-			}
+			// cout<<"-----------"<<endl;
+			// for(int i=n-1;i>=0;i--)
+			// {
+			// 	for(int j =0;j<n;j++)
+			// 	{
+			// 		cout<<a[j][i]<<" ";
+			// 	}
+			// 	cout<<endl;
+			// }
 			v1.clear();
 			v2.clear();
 			v3.clear();
@@ -469,7 +531,8 @@ void cuttree(int t,int n,vector <vector<int>> &desc,int x,int y,int xp,int yp)
 						int profit = desc[index][2]*desc[index][3]*desc[index][5];
 						// cout<<"profit: "<<profit<<endl;
 						value_cut = FindMax(k,l,t1,n,desc,x,y);
-						float time = (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]);
+						p.clear();
+						float time = pow((abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]),0.81);
 						float gross_profit = value_cut/time;
 						if(gross_profit>max1 and (abs(desc[index][0]-x)+abs(desc[index][1]-y)+desc[index][3]) <= t1)
 						{
